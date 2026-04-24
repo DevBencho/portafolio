@@ -1,12 +1,12 @@
 package dev.reux.login.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.Data;
 
-//esta clase representa la entidad dentro de la base de datos que vamos a crear mas adelante
+//2.esta clase representa la entidad dentro de la base de datos que vamos a crear mas adelante
 @Entity
+@Data
+@Table(name = "Usuarios")
 public class Usuarios {
     //asigna a la variable username como ID.
     @Id
@@ -16,6 +16,6 @@ public class Usuarios {
     private String email;
     private String name;
     private String lastname;
-    private String age;
+    private int age;
     private String gender;
 }
