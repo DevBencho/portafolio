@@ -5,7 +5,7 @@ public class UsuariosDTO {
     private int age;
     private String gender;
     //constructores para inicializar la clase
-    public UsuariosDTO(int age, String gender, String username) {
+    public UsuariosDTO(String username, int age, String gender) {
         this.age = age;
         this.gender = gender;
         this.username = username;
@@ -41,5 +41,8 @@ public class UsuariosDTO {
                 "Edad: " + age + "\n" +
                 "Genero: " + gender;
     }
-
+    //ahora debo modificar mi  controlador para que trabaje con la dto ya que el metodo del controlador
+    //esta interactuando directamente con la BD
+    //para esto debo crear la clase mapper, la cual es la que copia la informacion "no sensible"
+    // de la entity y la pega en la DTO
 }
