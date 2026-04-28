@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 @Service
 public class UsuariosService {
@@ -39,6 +40,27 @@ public class UsuariosService {
         Usuarios insert = entityManager.merge(usuario);
                           //USA MAPPER PARA CAMBIAR DE ENTIDAD A DTO Y MOSTRAR RESULTADO A CLIENTE
         return UsuarioMapper.copyDTO(insert);
+    }
+
+    //metodo para actualizar los usuarios de la BD
+    public UsuariosDTO actualizarUsuario(String username, UsuariosDTO dto) {
+        Optional<Usuarios> existe = repository.findById(username);
+        if(existe.isPresent()){
+            Usuarios user = existe.get();       //le pasamos el username almacenado en existe
+            user.setPassword(dto.getPassword());
+            user.setEmail(dto.getEmail());
+            user.setName(dto.getName());
+            user.setLastname(dto.getLastname());
+
+            Usuarios actualizado = repository.save(user);
+
+            return UsuarioMapper.copyDTO(actualizado);
+
+        } else {
+
+            throw new RuntimeException("Usuario con Username: " + dto.getUsername() + " No encontrado.");
+        }
+
     }
 
 }

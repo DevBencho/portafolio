@@ -28,6 +28,11 @@ public class Controlador {
         return service.insertarUsuario(dto);
 
     }
+    @PutMapping("/{username}")      //se le pase el username es decir LA PK @PutMapping("/{id}")
+    public UsuariosDTO actualizarUsuario(@PathVariable String username,  //el username se pasara atraves del path
+                                         @RequestBody UsuariosDTO dto){  //las modificaciones se pasran por el Bory de la request
+        return service.actualizarUsuario(username, dto);                 //llama  service para usar el metodo y actualizar los datos, se le pasa el username y el dto.
+    }
 
 
 }

@@ -15,7 +15,6 @@ import org.springframework.data.domain.Persistable;
 public class Usuarios implements Persistable<String> {
     //asigna a la variable username como ID.
     @Id
-
     @Column(name = "username")
     private String username;
     @Column(name = "password")
