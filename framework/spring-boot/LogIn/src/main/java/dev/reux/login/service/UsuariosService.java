@@ -4,25 +4,19 @@ import dev.reux.login.DTOs.UsuariosDTO;
 import dev.reux.login.entity.Usuarios;
 import dev.reux.login.mapper.UsuarioMapper;
 import dev.reux.login.repository.Repos_Usuarios;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 @Service
 public class UsuariosService {
-
-    @PersistenceContext
-    private EntityManager entityManager;
 
     @Autowired
     private Repos_Usuarios repository;
 
-   //metodo para realizar una consulta a la bd de datos con buenas practicas sin comprometer los datos sensibles.
     public List<UsuariosDTO> consulta(){
         return repository.findAll()
                 .stream()
@@ -30,47 +24,49 @@ public class UsuariosService {
                 .collect(Collectors.toList());
     }
 
-    //metodo paravedrtir el dto a entidad para guardar el usuario en la bd y
-    @Transactional                     //CREA EL OBJETO DTO
+    @Transactional
     public UsuariosDTO insertarUsuario(UsuariosDTO dto){
-                          //SE CONVIERTE A ENTIDAD
         Usuarios usuario = UsuarioMapper.copyEntity(dto);
-                          //SE MANDA EL VALOR DEL INSERT A LA TABLA
-                          // ES DECIR SER GUARDA EL USUARIO EN LA TABLA DE LA BD.
-        Usuarios insert = entityManager.merge(usuario);
-                          //USA MAPPER PARA CAMBIAR DE ENTIDAD A DTO Y MOSTRAR RESULTADO A CLIENTE
+        // Como es nuevo por defecto (isUpdate = false), save() hará un INSERT
+        Usuarios insert = repository.save(usuario);
         return UsuarioMapper.copyDTO(insert);
     }
 
-    //metodo para actualizar los usuarios de la BD
+    @Transactional
     public UsuariosDTO actualizarUsuario(String username, UsuariosDTO dto) {
-        Optional<Usuarios> existe = repository.findById(username);
-        if(existe.isPresent()){
-            Usuarios user = existe.get();       //le pasamos el username almacenado en existe
+        return repository.findById(username).map(user -> {
+            // MODIFICACIÓN: Marcamos que NO es nuevo para que JPA permita el UPDATE
+            user.markNotNew();
+
             user.setPassword(dto.getPassword());
             user.setEmail(dto.getEmail());
             user.setName(dto.getName());
             user.setLastname(dto.getLastname());
+            user.setAge(dto.getAge());
+            user.setGender(dto.getGender());
 
-            Usuarios actualizado = repository.save(user);
-
+            Usuarios actualizado = repository.saveAndFlush(user);
             return UsuarioMapper.copyDTO(actualizado);
-
-        } else {
-
-            throw new RuntimeException("Usuario con Username: " + dto.getUsername() + " No encontrado.");
-        }
-
+        }).orElseThrow(() -> new RuntimeException("Usuario con Username: " + username + " no encontrado."));
     }
+
     @Transactional
-    public String eliminarUsuario(String username){
-        if (repository.existsById(username)){
-            repository.deleteById(username);
+    public String eliminarUsuario(String username) {
+        Optional<Usuarios> usuarioOpcional = repository.findById(username);
+
+        if (usuarioOpcional.isPresent()) {
+            Usuarios user = usuarioOpcional.get();
+            // MODIFICACIÓN: Marcamos que NO es nuevo para que JPA permita el DELETE
+            user.markNotNew();
+
+            repository.delete(user);
             repository.flush();
-            return "Usuario eliminado correctamente";
+
+            System.out.println("DEBUG: Borrado confirmado para: " + username);
+            return "Usuario '" + username + "' eliminado correctamente";
         } else {
-            return "Usuario no encontrado";
+            System.out.println("DEBUG: No se encontró el usuario en la BD: " + username);
+            return "Error: El usuario '" + username + "' no existe.";
         }
     }
-
 }

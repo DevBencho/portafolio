@@ -7,14 +7,14 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/usuarios")
 public class Controlador {
 
     //inyeccion de dependencias para invocacion de los metodos del servicio
     @Autowired
     private UsuariosService service;
 
-    @GetMapping("/service")
+    @GetMapping("/list")
     public List <UsuariosDTO> listar(){
         return service.consulta();
     }
@@ -30,10 +30,10 @@ public class Controlador {
     }
     @PutMapping("/{username}")      //se le pase el username es decir LA PK @PutMapping("/{id}")
     public UsuariosDTO actualizarUsuario(@PathVariable String username,  //el username se pasara atraves del path
-                                         @RequestBody UsuariosDTO dto){  //las modificaciones se pasran por el Bory de la request
+                                         @RequestBody UsuariosDTO dto){  //las modificaciones se pasran por el Body de la request
         return service.actualizarUsuario(username, dto);                 //llama  service para usar el metodo y actualizar los datos, se le pasa el username y el dto.
     }
-    @DeleteMapping("/usuarios/{username}")
+    @DeleteMapping("/{username}")
     public String borrarUsuario(@PathVariable String username){
         return service.eliminarUsuario(username);
     }

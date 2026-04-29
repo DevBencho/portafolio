@@ -9,9 +9,18 @@ spring:
     username: SYSTEM
     password: ben002300
     driver-class-name: oracle.jdbc.OracleDriver
+    hikari:
+      auto-commit: true # Fuerza el commit al final de cada ejecución
+      connection-timeout: 30000
   jpa:
     database-platform: org.hibernate.dialect.OracleDialect
     hibernate:
       ddl-auto: update
     show-sql: true
+    properties:
+      hibernate:
+        # Esto obliga a liberar la conexión y confirmar cambios en Oracle
+        connection:
+          release_mode: after_transaction
+        format_sql: true
     
