@@ -62,5 +62,15 @@ public class UsuariosService {
         }
 
     }
+    @Transactional
+    public String eliminarUsuario(String username){
+        if (repository.existsById(username)){
+            repository.deleteById(username);
+            repository.flush();
+            return "Usuario eliminado correctamente";
+        } else {
+            return "Usuario no encontrado";
+        }
+    }
 
 }

@@ -33,6 +33,8 @@ public class Controlador {
                                          @RequestBody UsuariosDTO dto){  //las modificaciones se pasran por el Bory de la request
         return service.actualizarUsuario(username, dto);                 //llama  service para usar el metodo y actualizar los datos, se le pasa el username y el dto.
     }
-
-
+    @DeleteMapping("/usuarios/{username}")
+    public String borrarUsuario(@PathVariable String username){
+        return service.eliminarUsuario(username);
+    }
 }
