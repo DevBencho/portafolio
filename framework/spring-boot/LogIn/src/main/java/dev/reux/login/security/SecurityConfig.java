@@ -13,22 +13,28 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-@Configuration
-@EnableWebSecurity
+@Configuration // se maneja como clase de configuracion de Spring
+@EnableWebSecurity // habilita la seguridad personalizada para la app
 public class SecurityConfig{
+    //crea el metodo como un bean gestionado por spring
     @Bean
+    //metodo para la encriptacion de la contraseña
     public PasswordEncoder codificaPass(){
         return new BCryptPasswordEncoder();
     }
 
     @Bean
+    //admionistra internamente el componente que verifica las credenciales de usuario usando el userdetailservice y el password encoder
     public AuthenticationManager autenticacion(AuthenticationConfiguration authConfig)
             throws Exception{
         return authConfig.getAuthenticationManager();
     }
 
     @Bean
-    public SecurityFilterChain securityChain(HttpSecurity http)
+          //
+                                             //
+                                                                //gestor de autenticacion para validar usuarios y contraseñas
+    public SecurityFilterChain securityChain(HttpSecurity http, AuthenticationManager authManager)
             throws Exception{
         http.
                 csrf(AbstractHttpConfigurer::disable)
