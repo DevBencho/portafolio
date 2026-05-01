@@ -17,6 +17,10 @@ public class UsuariosDTO {
     private String gender;
     //constructores para inicializar la clase
 
+    public UsuariosDTO() {
+
+    }
+
     public UsuariosDTO(String username, String password, String email, String name, String lastname, int age, String gender) {
         this.username = username;
         this.password = password;

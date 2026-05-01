@@ -4,6 +4,7 @@ import dev.reux.login.DTOs.UsuariosDTO;
 import dev.reux.login.entity.Usuarios;
 import dev.reux.login.mapper.UsuarioMapper;
 import dev.reux.login.repository.Repos_Usuarios;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +29,7 @@ public class UsuariosService {
     public UsuariosDTO insertarUsuario(UsuariosDTO dto){
         Usuarios usuario = UsuarioMapper.copyEntity(dto);
         // Como es nuevo por defecto (isUpdate = false), save() hará un INSERT
+
         Usuarios insert = repository.save(usuario);
         return UsuarioMapper.copyDTO(insert);
     }
