@@ -1,0 +1,38 @@
+services:
+  # 1. Contenedor de la Base de Datos Oracle
+  oracle-db:
+    image: gvenzl/oracle-free:latest
+    container_name: technomarket-db
+    environment:
+      - ORACLE_PASSWORD=admin # Contraseña del usuario SYSTEM
+      - APP_USER=technouser   # usuario para el proyecto
+      - APP_PASSWORD=admin    # Contraseña del usuario
+    ports:
+      - "1522:1521"
+    volumes:
+      - oracle_data:/opt/oracle/oradata
+    networks:
+      - technomarket-network
+
+  # 2. Contenedor de Aplicacion Spring Boot
+  app:
+    build: . # Construyo la imagen usando el Dockerfile en la raíz por eso el .
+    container_name: technomarket-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - oracle-db
+    environment:
+      # Sobrescribi las variables de conexión para que apunte al contenedor de Oracle, no a localhost
+      - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@oracle-db:1521/FREEPDB1
+      - SPRING_DATASOURCE_USERNAME=technouser
+      - SPRING_DATASOURCE_PASSWORD=admin
+    networks:
+      - technomarket-network
+
+volumes:
+  oracle_data:
+
+networks:
+  technomarket-network:
+    driver: bridge

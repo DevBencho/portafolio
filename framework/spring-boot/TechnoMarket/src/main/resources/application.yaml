@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: TechnoMarket
+
+  datasource:
+    # Estos valores por defecto sirven para cuando corres el proyecto desde tu IDE (fuera de Docker)
+    url: jdbc:oracle:thin:@localhost:1522/FREEPDB1
+    username: technouser
+    password: admin
+    driver-class-name: oracle.jdbc.OracleDriver
+
+  jpa:
+    hibernate:
+      ddl-auto: update # Crea o actualiza las tablas automáticamente al iniciar la aplicación
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.OracleDialect
