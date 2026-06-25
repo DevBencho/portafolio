@@ -25,10 +25,16 @@ public class CrearArticulo {
             codigo = scan.nextLine();
             articulo.setCodigo(codigo);
             
-            System.out.println("Ingresa el precio del articulo");
-            precio = scan.nextDouble();
+            /* Se usa nextDouble(), el usuario escribe un número y presiona Enter
+            Ese Enter queda en el buffer, lo limpio con scan.nextLine()
+            Después el sistema pregunta "¿Deseas ingresar otro artículo? (s/n)" y  vuelvo a usar nextLine() para leer
+            se queda leyendo un salto de línea vacío y nunca entra bien la respuesta
+            para solucionarlo leo siempre con y convierto a double luego
+            */
+            System.out.println("Ingresa el precio del articulo"); 
+            String precioStr = scan.nextLine();     //leo como texto el monto ingresado
+            precio = Double.parseDouble(precioStr);     //convierto el texto del monto ingresado a Double, asi evito saltos y mi loop bunciona bien
             articulo.setPrecio(precio);
-            scan.nextLine(); //limpia el salto de linea (de double a String)
             
             System.out.println("Ingresa descripcion del articulo");
             descripcion = scan.nextLine();
@@ -36,7 +42,8 @@ public class CrearArticulo {
             
             System.out.println(articulo); //muestra el articulo ingresado como un objeto
             System.out.println("Deseas ingresar otro articulo? (s/n)");
-            String respuesta = scan.nextLine();
+            String respuesta = scan.nextLine().trim();      //uso trim para eliminar espacios.
+            
                 if (respuesta.equalsIgnoreCase("n")) {
                     control = false;
                 }
