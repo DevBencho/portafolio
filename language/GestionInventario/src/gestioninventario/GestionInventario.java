@@ -3,10 +3,12 @@ package gestioninventario;
 import java.util.Scanner;
 import java.util.InputMismatchException;
 import operacionesCRUD.CrearArticulo; //importo el paquete y la clase para poder usarlas en metodo main
+import java.util.ArrayList;
 
 public class GestionInventario {
     static Scanner scan = new Scanner(System.in);
-    static int opcion;
+    static int opcion = 0; //inicializo la variable opcion para poder usarla en el while de mi loop
+    static ArrayList<Articulo> inventario = new ArrayList<>();
     
     public static void main(String[] args) {
         
@@ -17,7 +19,7 @@ public class GestionInventario {
             System.out.println("3.  Modificar articulo");
             System.out.println("4.  Eliminar articulo");
             System.out.println("5.  Salir de Menu Principal");
-            int opcion =0; //inicializo la variable opcion para poder usarla en el while de mi loop
+             
             System.out.println("Slecciona el numero de la opcion a realizar");
             try {
             opcion = scan.nextInt();
@@ -32,7 +34,7 @@ public class GestionInventario {
                     CrearArticulo maker = new CrearArticulo(); //creo una instancia de la clase CrearArticulo para poder acceder a su metodo principal.
                     Articulo nuevoArticulo = new Articulo(); //creo un articulo vacio llamando al constructor de Articulo.
                     maker.ingresarArticulo(nuevoArticulo); // utilizo maker (la clase para crear un articulo Crud) para acceder al metodo ingresarArticulo
-                                                           //y le paso el objeto vacio creado de Articulo (nuevoArticulo) como parametro para el metodo ingresarArticulo. 
+                    inventario.add(nuevoArticulo);                                       //y le paso el objeto vacio creado de Articulo (nuevoArticulo) como parametro para el metodo ingresarArticulo. 
                     scan.nextLine();        //limpia el buffer antes de volver al menu principal
                     break;
                 case 3:
